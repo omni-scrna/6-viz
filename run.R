@@ -5,9 +5,6 @@ suppressPackageStartupMessages({
   library(data.table)
 })
 
-# Source main functions
-source("src/main.R")
-
 # Parse command line arguments
 parser <- ArgumentParser(description="OmniBenchmark module")
 
@@ -56,7 +53,13 @@ cat("flavour:", args$flavour, "\n")
 if (args$flavour == "scrapper_UMAP") {
   require(scrapper)
   pca <- fread(args$pcas.tsv, header = TRUE)
-  embed <- runUmap(pca) # maybe add params
+  pca <- as.data.frame(pca)
+  rownames(pca) <- pca$cell_id
+  pca$cell_id <- NULL
+  embed <- runUmap(t(as.matrix(pca)))
+  rownames(embed) <- rownames(pca)
+  colnames(embed) <- paste0("UMAP", seq_len(ncol(embed)))
+  cat(head(embed, 3))
 } else if (args$flavour == "XXX") {
   # do something here
 } else {
