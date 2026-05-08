@@ -2,6 +2,7 @@
 
 suppressPackageStartupMessages({
   library(argparse)
+  library(data.table)
 })
 
 # Source main functions
@@ -54,7 +55,6 @@ cat("flavour:", args$flavour, "\n")
 
 if (args$flavour == "scrapper_UMAP") {
   require(scrapper)
-  require(data.table)
   pca <- fread(args$pcas.tsv, header = TRUE)
   embed <- runUmap(pca) # maybe add params
 } else if (args$flavour == "XXX") {
