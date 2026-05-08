@@ -16,12 +16,19 @@ parser$add_argument("--output_dir", dest="output_dir", type="character", require
 parser$add_argument("--name", dest="name", type="character", required=TRUE,
                    help="Module name/identifier")
 # Stage-specific inputs
-parser$add_argument("--pcas.tsv", dest="pcas",
+parser$add_argument("--pcas.tsv", dest="pcas.tsv",
                    type="character", required=FALSE,
                    help="Input: PCs TSV file")
 parser$add_argument("--flavour", dest="flavour",
                    type="character", required=FALSE,
                    help="Input: flavour on non-linear embedding")
+parser$add_argument("--rawdata.h5ad", dest="rawdata.h5ad",
+                   type="character", required=FALSE,
+                   help="Input: file with raw H5 AnnData")
+parser$add_argument("--filtered.cellids", dest="filtered.cellids",
+                   type="character", required=FALSE,
+                   help="Input: file with the filtered cell ids")
+
 #parser$add_argument("--perplexity", dest="perplexity",
 #                   type="integer", required=FALSE,
 #                   help="Input: perplexity value")
@@ -30,7 +37,7 @@ args <- parser$parse_args()
 
 cat("Output directory:", args$output_dir, "\n")
 cat("Module name:", args$name, "\n")
-cat("pca:", args$pcas, "\n")
+cat("pca:", args$pcas.tsv, "\n")
 cat("flavour:", args$flavour, "\n")
 
 
@@ -48,7 +55,7 @@ cat("flavour:", args$flavour, "\n")
 if (args$flavour == "scrapper_UMAP") {
   require(scrapper)
   require(data.table)
-  pca <- fread(args$pcas, header = TRUE)
+  pca <- fread(args$pcas.tsv, header = TRUE)
   embed <- runUmap(pca) # maybe add params
 } else if (args$flavour == "XXX") {
   # do something here
